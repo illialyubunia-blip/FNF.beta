@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dandy's World Remake</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="elevator-gate">
+        <div class="elevator-door-container">
+            <div class="yellow-stripes"></div>
+            <img src="img/dandys.png" id="elevator-logo">
+            <div class="yellow-stripes-bottom"></div>
+        </div>
+    </div>
+
+    <div id="lobby">
+        <button class="area-btn" id="toons-btn" onclick="openShop()">TOONS</button>
+        <button class="area-btn" id="play-btn" onclick="startGame()">PLAY</button>
+    </div>
+
+    <div id="shop-overlay" class="hidden">
+        <div id="shop-container">
+            <div class="shop-header">
+                <button class="back-icon-btn" onclick="closeShop()">◀</button>
+                <h2 class="shop-main-title">BUY TOON LICENSES</h2>
+            </div>
+
+            <div class="shop-body">
+                <div class="toon-grid">
+                    <div class="toon-item rainbow" id="card-Sprout" onclick="selectToon('Sprout')"><img src="img/Sprout.jpg"><span>Sprout</span></div>
+                    <div class="toon-item rainbow" id="card-Astro" onclick="selectToon('Astro')"><img src="img/Astro.jpg"><span>Astro</span></div>
+                    <div class="toon-item rainbow" id="card-Pebble" onclick="selectToon('Pebble')"><img src="img/Pebble.jpg"><span>Pebble</span></div>
+                    <div class="toon-item rainbow" id="card-Shelly" onclick="selectToon('Shelly')"><img src="img/Shelly.jpg"><span>Shelly</span></div>
+                    <div class="toon-item rainbow" id="card-Vee" onclick="selectToon('Vee')"><img src="img/Vee.jpg"><span>Vee</span></div>
+                    
+                    <div class="toon-item frame-bassie" id="card-Bassie" onclick="selectToon('Bassie')"><img src="img/Bassie.png"><span>Bassie</span></div>
+                    <div class="toon-item frame-bobette" id="card-Bobette" onclick="selectToon('Bobette')"><img src="img/Bobette.png"><span>Bobette</span></div>
+                    <div class="toon-item frame-gurdy" id="card-Gurdy" onclick="selectToon('Gurdy')"><img src="img/Gurdy.png"><span>Gurdy</span></div>
+                </div>
+
+                <div class="toon-details-panel">
+                    <div class="preview-section">
+                        <div class="big-render-box"><img src="" id="display-img"></div>
+                        <div class="character-header">
+                            <h3 id="display-name">---</h3>
+                            <div class="ability-label" id="display-ability-title">ABILITY: ---</div>
+                        </div>
+                    </div>
+
+                    <div class="info-footer">
+                        <div class="requirements-box">
+                            <h4>EVENT REQUIRED</h4>
+                            <p id="display-req">---</p>
+                            <div class="price-tag" id="display-price">---</div>
+                        </div>
+                        <div class="abilities-box">
+                            <div class="ability-desc-card">
+                                <p id="display-ability-desc">---</p>
+                            </div>
+                            <button class="purchase-btn">PURCHASE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const toonData = {
+            'Sprout': { img: 'img/Sprout.jpg', price: '💧 2500', req: 'Research 100%', ability: 'Nature Buff', desc: 'Ability gives 20%. CD: 45s.' },
+            'Astro': { img: 'img/Astro.jpg', price: '💧 4000', req: 'Research 100%', ability: 'Star Cover', desc: 'For 5s, you receive 20% less damage. CD: 45s.' },
+            'Pebble': { img: 'img/Pebble.jpg', price: '💧 5000', req: 'Research 100%', ability: 'Steady Flow', desc: 'Reduces arrow speed by 15%. CD: 50s.' },
+            'Shelly': { img: 'img/Shelly.jpg', price: '💧 4500', req: 'Research 100%', ability: 'Turbo Extraction', desc: 'Increases extraction speed by 45%. CD: 40s.' },
+            'Vee': { img: 'img/Vee.jpg', price: '💧 4500', req: 'Research 100%', ability: 'System Skip', desc: 'Chance to skip Twisted. CD: 1 floor.' },
+            'Bassie': { img: 'img/Bassie.png', price: '💧 3000', req: 'Valentine Event', ability: 'Deep Pockets', desc: 'Passive: +1 slot.' },
+            'Bobette': { img: 'img/Bobette.png', price: '💧 3500', req: 'Carnival Event', ability: 'Infinity Shield', desc: 'Infinity shield for 3s. CD: 45s.' },
+            'Gurdy': { img: 'img/Gurdy.png', price: '💧 6000', req: 'Depths Event', ability: 'Chaos Surge', desc: 'Random buff for 6.5s. CD: 45s.' }
+        };
+
+        function selectToon(name) {
+            const data = toonData[name];
+            document.querySelectorAll('.toon-item').forEach(i => i.classList.remove('active-border'));
+            const card = document.getElementById('card-' + name);
+            if(card) card.classList.add('active-border');
+            
+            document.getElementById('display-name').innerText = name;
+            document.getElementById('display-img').src = data.img;
+            document.getElementById('display-price').innerText = data.price;
+            document.getElementById('display-req').innerText = data.req;
+            document.getElementById('display-ability-title').innerText = "ABILITY: " + data.ability;
+            document.getElementById('display-ability-desc').innerText = data.desc;
+        }
+
+        window.onload = () => { 
+            selectToon('Sprout'); 
+            setTimeout(() => document.getElementById('elevator-gate').classList.add('gate-open'), 1000); 
+        };
+
+        function openShop() { document.getElementById('shop-overlay').classList.remove('hidden'); }
+        function closeShop() { document.getElementById('shop-overlay').classList.add('hidden'); }
+
+        function startGame() {
+            const gate = document.getElementById('elevator-gate');
+            const lobby = document.getElementById('lobby');
+            
+            gate.classList.remove('gate-open'); 
+            
+            setTimeout(() => {
+                lobby.style.backgroundImage = "url('img/elevator.jpg')"; 
+                
+                document.getElementById('toons-btn').style.opacity = "0";
+                document.getElementById('play-btn').style.opacity = "0";
+                document.getElementById('toons-btn').style.pointerEvents = "none";
+                document.getElementById('play-btn').style.pointerEvents = "none";
+
+                setTimeout(() => {
+                    gate.classList.add('gate-open'); 
+                }, 500);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
